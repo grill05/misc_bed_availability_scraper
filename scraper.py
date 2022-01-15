@@ -625,6 +625,7 @@ if __name__ == "__main__":
         "manipur",
         "pgimer",
         "ahmedabad",
+        "puducherry",
     ]
     # List of cities for which the generic writing logic should be executed
     generic_writer_cities = [
@@ -654,10 +655,13 @@ if __name__ == "__main__":
         "up",
         "pgimer",
         "ahmedabad",
+        "puducherry",
     ]
 
-    ## all_cities = [all_cities[-1]]  # Uncomment this to run on the last city/state added
-    ## generic_writer_cities = [generic_writer_cities[-1]]  # uncomment this to run the generic writing logic on last city added
+    all_cities = [all_cities[-1]]  # Uncomment this to run on the last city/state added
+    generic_writer_cities = [
+        generic_writer_cities[-1]
+    ]  # uncomment this to run the generic writing logic on last city added
     print("all cities: {}".format(all_cities))
     print("generic writer cities: {}".format(generic_writer_cities))
     for city in all_cities:
@@ -968,7 +972,41 @@ if __name__ == "__main__":
                 print(city + ":")
                 print(row)
                 os.system("rm -rf *.pdf")
+            elif city == "puducherry":
+                date = datetime.datetime.now()
+                date_str = date.strftime("%Y-%m-%d")
+                options = webdriver.ChromeOptions()
+                options.add_argument("--ignore-certificate-errors")
+                options.add_argument("--headless")
+                br = webdriver.Chrome(chrome_options=options)
+                br.get("https://covid19dashboard.py.gov.in/BedAvailabilityDetails")
 
+                soup = BeautifulSoup(br.page_source, "html.parser")
+                for body in soup("tbody"):
+                    body.unwrap()
+
+                dfs = pd.read_html(str(soup), flavor="bs4")
+                dff = dfs[0]
+                (
+                    isolation_beds_total,
+                    isolation_beds_vacant,
+                    o2_beds_total,
+                    o2_beds_vacant,
+                    ventilator_beds_total,
+                    ventilator_beds_vacant,
+                ) = dff.iloc[-1].tolist()[2:]
+
+                row = (
+                    date_str,
+                    isolation_beds_total,
+                    isolation_beds_vacant,
+                    o2_beds_total,
+                    o2_beds_vacant,
+                    ventilator_beds_total,
+                    ventilator_beds_vacant,
+                )
+                print(city + ":")
+                print(row)
             elif city == "pb":
                 soup = get_url_failsafe(
                     "https://phsc.punjab.gov.in/en/covid-19-notifications"
