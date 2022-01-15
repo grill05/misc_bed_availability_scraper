@@ -626,6 +626,7 @@ if __name__ == "__main__":
         "pgimer",
         "ahmedabad",
         "puducherry",
+        "ladakh",
     ]
     # List of cities for which the generic writing logic should be executed
     generic_writer_cities = [
@@ -656,6 +657,7 @@ if __name__ == "__main__":
         "pgimer",
         "ahmedabad",
         "puducherry",
+        "ladakh",
     ]
 
     ## all_cities = [all_cities[-1]]  # Uncomment this to run on the last city/state added
@@ -1004,6 +1006,38 @@ if __name__ == "__main__":
                     o2_beds_vacant,
                     ventilator_beds_total,
                     ventilator_beds_vacant,
+                )
+                print(city + ":")
+                print(row)
+            elif city == "ladakh":
+                date = datetime.datetime.now()
+                date_str = date.strftime("%Y-%m-%d")
+                options = webdriver.ChromeOptions()
+                options.add_argument("--ignore-certificate-errors")
+                options.add_argument("--headless")
+                br = webdriver.Chrome(chrome_options=options)
+                br.get("http://covid.ladakh.gov.in")
+
+                soup = BeautifulSoup(br.page_source, "html.parser")
+
+                for body in soup("tbody"):
+                    body.unwrap()
+                dfs = pd.read_html(str(soup), flavor="bs4")
+                dff = dfs[0]
+
+                ventilators_and_icu_occupied = int(
+                    dff["Ventilator/ICU"].sum(skipna=True)
+                )
+                o2_beds_occupied = int(dff["Oxygen Supported"].sum(skipna=True))
+                normal_beds_occupied = int(dff["Normal"].sum(skipna=True))
+                total_beds_vacant = int(dff["Total Vaccant Beds"].sum(skipna=True))
+
+                row = (
+                    date_str,
+                    o2_beds_occupied,
+                    ventilators_and_icu_occupied,
+                    normal_beds_occupied,
+                    total_beds_vacant,
                 )
                 print(city + ":")
                 print(row)
