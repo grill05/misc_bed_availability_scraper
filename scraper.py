@@ -658,10 +658,10 @@ if __name__ == "__main__":
         "puducherry",
     ]
 
-    all_cities = [all_cities[-1]]  # Uncomment this to run on the last city/state added
-    generic_writer_cities = [
-        generic_writer_cities[-1]
-    ]  # uncomment this to run the generic writing logic on last city added
+    ## all_cities = [all_cities[-1]]  # Uncomment this to run on the last city/state added
+    ## generic_writer_cities = [
+    ##    generic_writer_cities[-1]
+    ## ]  # uncomment this to run the generic writing logic on last city added
     print("all cities: {}".format(all_cities))
     print("generic writer cities: {}".format(generic_writer_cities))
     for city in all_cities:
