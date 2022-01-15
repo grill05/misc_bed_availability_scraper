@@ -587,7 +587,7 @@ def mumbai_bulletin_auto_parser(bulletin="", proxy=global_proxy):
 if __name__ == "__main__":
 
     failed_cities = []
-    for city in [
+    all_cities = [
         "bengaluru",
         "hp",
         "mp",
@@ -620,7 +620,43 @@ if __name__ == "__main__":
         "up",
         "manipur",
         "pgimer",
-    ]:
+        "ahmedabad",
+    ]
+    # List of cities for which the generic writing logic should be executed
+    generic_writer_cities = [
+        "mp",
+        "hp",
+        "pune",
+        "chandigarh",
+        "uttarakhand",
+        "kerala",
+        "ap",
+        "telangana",
+        "nagpur",
+        "nashik",
+        "gandhinagar",
+        "vadodara",
+        "wb",
+        "pb",
+        "jammu",
+        "goa",
+        "bihar",
+        "rajasthan",
+        "ludhiana",
+        "jamshedpur",
+        "jharkhand",
+        "meghalaya",
+        "manipur",
+        "up",
+        "pgimer",
+        "ahmedabad",
+    ]
+
+    ## all_cities = [all_cities[-1]]  # Uncomment this to run on the last city/state added
+    ## generic_writer_cities = [generic_writer_cities[-1]]  # uncomment this to run the generic writing logic on last city added
+    print("all cities: {}".format(all_cities))
+    print("generic writer cities: {}".format(generic_writer_cities))
+    for city in all_cities:
         # ~ for city in ['up']:
         print("running scraper for: " + city)
         date = datetime.datetime.now()
@@ -899,6 +935,35 @@ if __name__ == "__main__":
                 )
                 print(city + ":")
                 print(row)
+            elif city == "ahmedabad":
+                url = "https://ahmedabadcity.gov.in/portal/COVID19.jsp"
+                options = webdriver.ChromeOptions()
+                options.add_argument("--ignore-certificate-errors")
+                options.add_argument("--headless")
+                br = webdriver.Chrome(chrome_options=options)
+                br.get(url)
+                soup = BeautifulSoup(br.page_source, "html.parser")
+                for body in soup("tbody"):
+                    body.unwrap()
+
+                dfs = pd.read_html(str(soup), flavor="bs4")
+                dff = dfs[0]
+                (
+                    isolation_beds,
+                    o2_beds,
+                    icu_ventilator_beds,
+                    icu_nonventilator_beds,
+                ) = dff.iloc[0].tolist()
+                row = (
+                    date_str,
+                    isolation_beds,
+                    o2_beds,
+                    icu_ventilator_beds,
+                    icu_nonventilator_beds,
+                )
+                print(city + ":")
+                print(row)
+                os.system("rm -rf *.pdf")
 
             elif city == "pb":
                 soup = get_url_failsafe(
@@ -2134,33 +2199,7 @@ if __name__ == "__main__":
                     print("Appended to data.chennai.csv: " + info)
 
             # generic writer for most cities
-            if city in [
-                "mp",
-                "hp",
-                "pune",
-                "chandigarh",
-                "uttarakhand",
-                "kerala",
-                "ap",
-                "telangana",
-                "nagpur",
-                "nashik",
-                "gandhinagar",
-                "vadodara",
-                "wb",
-                "pb",
-                "jammu",
-                "goa",
-                "bihar",
-                "rajasthan",
-                "ludhiana",
-                "jamshedpur",
-                "jharkhand",
-                "meghalaya",
-                "manipur",
-                "up",
-                "pgimer",
-            ]:
+            if city in generic_writer_cities:
                 csv_fname = "data." + city + ".csv"
                 a = open(csv_fname)
                 r = csv.reader(a)
