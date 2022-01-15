@@ -18,6 +18,10 @@ from bs4 import BeautifulSoup
 # ~ global_proxy='socks4://103.88.221.194:46450'
 global_proxy = "socks4://49.206.195.204:5678"
 
+# Set timezone globally
+os.environ["TZ"] = "Asia/Kolkata"
+time.tzset()
+
 
 def get_dataset_from_html_table(table):
     headings = [th.get_text() for th in table.find("tr").find_all("th")]
