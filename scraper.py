@@ -627,6 +627,7 @@ if __name__ == "__main__":
         "ahmedabad",
         "puducherry",
         "ladakh",
+        "chhattisgarh",
     ]
     # List of cities for which the generic writing logic should be executed
     generic_writer_cities = [
@@ -658,12 +659,13 @@ if __name__ == "__main__":
         "ahmedabad",
         "puducherry",
         "ladakh",
+        "chhattisgarh",
     ]
 
-    ## all_cities = [all_cities[-1]]  # Uncomment this to run on the last city/state added
-    ## generic_writer_cities = [
-    ##    generic_writer_cities[-1]
-    ## ]  # uncomment this to run the generic writing logic on last city added
+    # all_cities = [all_cities[-1]]  # Uncomment this to run on the last city/state added
+    # generic_writer_cities = [
+    #    generic_writer_cities[-1]
+    # ]  # uncomment this to run the generic writing logic on last city added
     print("all cities: {}".format(all_cities))
     print("generic writer cities: {}".format(generic_writer_cities))
     for city in all_cities:
@@ -1039,6 +1041,52 @@ if __name__ == "__main__":
                     normal_beds_occupied,
                     total_beds_vacant,
                 )
+                print(city + ":")
+                print(row)
+            elif city == "chhattisgarh":
+                date = datetime.datetime.now()
+                date_str = date.strftime("%Y-%m-%d")
+
+                options = webdriver.ChromeOptions()
+                options.add_argument("--ignore-certificate-errors")
+                options.add_argument("--headless")
+                br = webdriver.Chrome(chrome_options=options)
+                br.get("https://govthealth.cg.gov.in/")
+                soup = BeautifulSoup(br.page_source, "html.parser")
+
+                district_element = br.find_element_by_name(
+                    "ctl00$MainContent$ddDistrict"
+                )
+                district_element.send_keys("0")  # for all districts
+                submit = br.find_element_by_name("ctl00$MainContent$btnSearch")
+                submit.click()
+
+                soup = BeautifulSoup(br.page_source, "html.parser")
+                # tables = soup.find_all("table")
+
+                for body in soup("tbody"):
+                    body.unwrap()
+
+                dfs = pd.read_html(str(soup), flavor="bs4")
+                dff = dfs[1]
+                new_header = dff.iloc[0]  # grab the first row for the header
+                dff = dff[1:]  # take the data less the header row
+                dff.columns = new_header  # set the header row as the df header
+                dff.loc[:, "Bed Type"] = (
+                    dff["Bed Type"].str.lower().str.replace(" ", "_")
+                )
+                dff = dff.set_index("Bed Type")
+                dff.columns = dff.columns.str.lower()
+                dff = dff.applymap(int)
+                keys = ["vacant", "full", "total"]
+                data = [date_str]
+                labels = ["date_str"]
+                for index, row in dff.iterrows():
+                    for key in keys:
+                        data.append(row[key])
+                        labels.append("{}_{}".format(index, key))
+                row = tuple(data)
+
                 print(city + ":")
                 print(row)
             elif city == "pb":
