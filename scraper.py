@@ -8,7 +8,7 @@ import pandas as pd
 from urllib.parse import unquote
 
 
-import os, requests, time, bs4, datetime, csv, colorama
+import ast, os, requests, time, bs4, datetime, csv, colorama
 from PIL import Image
 import json, time, re, pytz, tqdm
 from bs4 import BeautifulSoup
@@ -628,6 +628,7 @@ if __name__ == "__main__":
         "puducherry",
         "ladakh",
         "chhattisgarh",
+        "nagaland",
     ]
     # List of cities for which the generic writing logic should be executed
     generic_writer_cities = [
@@ -1089,6 +1090,109 @@ if __name__ == "__main__":
 
                 print(city + ":")
                 print(row)
+            elif city == "nagaland":
+                date = datetime.datetime.now()
+                date_str = date.strftime("%Y-%m-%d")
+                options = webdriver.ChromeOptions()
+                options.add_argument("--ignore-certificate-errors")
+                options.add_argument("--headless")
+                br = webdriver.Chrome(chrome_options=options)
+                br.get("https://covid19.nagaland.gov.in/charts")
+
+                soup = BeautifulSoup(br.page_source, "lxml")
+                scpt = soup.select("script")
+
+                for itern, s in enumerate(scpt):
+                    if len(s.contents) > 0 and "var h_data = " in s.contents[0]:
+                        hospitalization_data_tmp = (
+                            s.contents[0]
+                            .split("var h_data = ")[1]
+                            .split(";")[0]
+                            .replace(", ]", "]")
+                            .replace("[ ", "[")
+                            .replace(",  ,", ",  'NA',")
+                        )
+                        hospitalization_data_parsed = ast.literal_eval(
+                            hospitalization_data_tmp
+                        )
+                        hospitalization_data = pd.to_numeric(
+                            hospitalization_data_parsed, errors="coerce"
+                        ).astype(float)
+                        hospitalization_data[hospitalization_data < 0] = float("nan")
+                        hospitalization_data = hospitalization_data.tolist()
+                        labels_tmp = (
+                            s.contents[0]
+                            .split("var label = ")[1]
+                            .split(";")[0]
+                            .replace(", ]", "]")
+                            .replace("[ ", "[")
+                        )
+                        labels_tmp = (
+                            s.contents[0]
+                            .split("var label = ")[1]
+                            .split(";")[0]
+                            .replace(", ]", "]")
+                            .replace("[ ", "[")
+                        )
+                        labels_parsed = ast.literal_eval(labels_tmp)
+                        # if it is not in [Jan, Feb, March, April] it must be from 2021
+                        months_2021 = [
+                            "May",
+                            "Jun",
+                            "Jul",
+                            "Aug",
+                            "Sep",
+                            "Oct",
+                            "Nov",
+                            "Dec",
+                        ]
+                        dates = []
+                        for date in labels_parsed:
+                            if date[-3:] in months_2021:
+                                date_unformatted = date + " 2021"
+
+                            else:
+                                date_unformatted = date + " 2022"
+
+                            date_formatted = datetime.datetime.strptime(
+                                date_unformatted, "%d %b %Y"
+                            )
+                            date_str = date_formatted.strftime("%Y-%m-%d")
+
+                            dates.append(date_str)
+                        data = pd.DataFrame.from_dict(
+                            dict(zip(dates, hospitalization_data)),
+                            orient="index",
+                            columns=["total_hospitalization"],
+                        )
+                        data.total_hospitalization = data.total_hospitalization.astype(
+                            "Int64"
+                        )
+                        data.index.name = "date_str"
+                        if not os.path.exists("data.nagaland.csv"):
+                            data = data.reset_index()
+                            data.to_csv("data.nagaland.csv", index=False, header=True)
+                        existing_data = pd.read_csv("data.nagaland.csv", index_col=0)
+                        existing_data.total_hospitalization = (
+                            existing_data.total_hospitalization.astype("Int64")
+                        )
+                        # do not change old entries
+                        already_present_index = data.index.intersection(
+                            existing_data.index
+                        )
+                        # are there new dates?
+                        missing_index = data.index.difference(existing_data.index)
+                        if len(missing_index):
+                            existing_data.append(data.loc[missing_index, :])
+
+                            existing_data = existing_data.reset_index()
+
+                            existing_data.to_csv(
+                                "data.nagaland.csv",
+                                index=False,
+                                header=True,
+                            )
+                        break
             elif city == "pb":
                 soup = get_url_failsafe(
                     "https://phsc.punjab.gov.in/en/covid-19-notifications"
