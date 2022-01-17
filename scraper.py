@@ -662,7 +662,6 @@ if __name__ == "__main__":
         "ladakh",
         "chhattisgarh",
     ]
-
     # all_cities = [all_cities[-1]]  # Uncomment this to run on the last city/state added
     # generic_writer_cities = [
     #    generic_writer_cities[-1]
@@ -1183,7 +1182,7 @@ if __name__ == "__main__":
                         # are there new dates?
                         missing_index = data.index.difference(existing_data.index)
                         if len(missing_index):
-                            existing_data.append(data.loc[missing_index, :])
+                            existing_data = existing_data.append(data.loc[missing_index, :])
 
                             existing_data = existing_data.reset_index()
 
@@ -1513,10 +1512,8 @@ if __name__ == "__main__":
                             print("CalledProcessError when parsing Jharkhand pdf!")
                             continue
                         dff = tables[0]
-
                         if "Bed Status" in " ".join(dff.columns):
                             raw_line = " ".join(list(dff.iloc[len(dff) - 1])).strip()
-
                             (
                                 tot_o2,
                                 occupied_o2,
@@ -1534,19 +1531,19 @@ if __name__ == "__main__":
                                 .date()
                                 .strftime("%Y-%m-%d")
                             )
+                            row = (
+                                report_date_str,
+                                tot_o2,
+                                tot_icu,
+                                tot_vent,
+                                occupied_o2,
+                                occupied_icu,
+                                occupied_vent,
+                            )
+                            print(city + ":")
+                            print(row)
 
                 os.system("rm -v *pdf")
-                row = (
-                    report_date_str,
-                    tot_o2,
-                    tot_icu,
-                    tot_vent,
-                    occupied_o2,
-                    occupied_icu,
-                    occupied_vent,
-                )
-                print(city + ":")
-                print(row)
             elif city == "jamshedpur":
                 options = webdriver.ChromeOptions()
                 options.add_argument("--ignore-certificate-errors")
