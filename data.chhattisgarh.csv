@@ -1,2 +1,2 @@
-date_str,normal_beds_vacant,normal_beds_full,normal_beds_total,oxygen_beds_vacant,oxygen_beds_full,oxygen_beds_total,hdu_beds_vacant,hdu_beds_full,hdu_beds_total,icu_beds_vacant,icu_beds_full,icu_beds_total,ventilator_beds_vacant,ventilator_beds_full,ventilator_beds_total
+date,normal_beds_vacant,normal_beds_full,normal_beds_total,oxygen_beds_vacant,oxygen_beds_full,oxygen_beds_total,hdu_beds_vacant,hdu_beds_full,hdu_beds_total,icu_beds_vacant,icu_beds_full,icu_beds_total,ventilator_beds_vacant,ventilator_beds_full,ventilator_beds_total
 2022-01-17,6626,379,7005,9954,366,10320,1309,77,1386,1514,117,1631,1151,35,1186
