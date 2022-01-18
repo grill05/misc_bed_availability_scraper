@@ -1,2 +1,3 @@
 date,normal_beds_vacant,occupied_normal_beds,total_normal_beds,oxygen_beds_vacant,occupied_o2_beds,total_o2_beds,hdu_beds_vacant,hdu_beds_full,hdu_beds_total,icu_beds_vacant,occupied_icu_beds,total_icu_beds,ventilator_beds_vacant,occupied_ventilator_beds,total_ventilator_beds
 2022-01-17,6626,379,7005,9954,366,10320,1309,77,1386,1514,117,1631,1151,35,1186
+2022-01-18,6654,351,7005,9962,368,10330,1311,75,1386,1515,125,1640,1149,38,1187
