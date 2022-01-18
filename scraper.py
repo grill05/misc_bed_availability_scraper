@@ -1192,9 +1192,9 @@ if __name__ == "__main__":
                                     .tolist()
                                 )
                                 row = (bulletin_date, totals[0], totals[1], totals[2])
-                                print(city + ":")
-                                print(row)
                                 break
+                    print(city + ":")
+                    print(row)
             elif city == "nagaland":
                 date = datetime.datetime.now()
                 date_str = date.strftime("%Y-%m-%d")
