@@ -999,10 +999,14 @@ if __name__ == "__main__":
                     ventilator_beds_total,
                     ventilator_beds_vacant,
                 ) = dff.iloc[-1].tolist()[2:]
-                
-                occupied_isolation_beds=int(isolation_beds_total)-int(isolation_beds_vacant)
-                occupied_o2_beds=int(o2_beds_total)-int(o2_beds_vacant)
-                occupied_ventilator_beds=int(ventilator_beds_total)-int(ventilator_beds_vacant)
+
+                occupied_isolation_beds = int(isolation_beds_total) - int(
+                    isolation_beds_vacant
+                )
+                occupied_o2_beds = int(o2_beds_total) - int(o2_beds_vacant)
+                occupied_ventilator_beds = int(ventilator_beds_total) - int(
+                    ventilator_beds_vacant
+                )
 
                 row = (
                     date_str,
@@ -1186,7 +1190,9 @@ if __name__ == "__main__":
                         # are there new dates?
                         missing_index = data.index.difference(existing_data.index)
                         if len(missing_index):
-                            existing_data = existing_data.append(data.loc[missing_index, :])
+                            existing_data = existing_data.append(
+                                data.loc[missing_index, :]
+                            )
 
                             existing_data = existing_data.reset_index()
 
@@ -2286,18 +2292,17 @@ if __name__ == "__main__":
                     + ".pdf tmp.txt"
                 )
                 b = [i.strip() for i in open("tmp.txt").readlines() if i.strip()]
-                date_line = ["Last edited on 9-January-2022 5.00 PM"]
-                if not date_line:
+                date_line = "Last edited on"
+                if not b[3].startswith(date_line):
                     print(highlight("could not extract date for Ludhiana!!"))
                     continue
-                date_line = date_line[0].split()
+                date_line = b[3].split()
                 date_line = date_line[date_line.index("on") + 1]
                 bulletin_date = datetime.datetime.strptime(date_line, "%d-%B-%Y")
 
                 # print(text)
                 tables = read_pdf("LDH_" + str(date_str) + ".pdf", pages="all")
                 df = tables[-1]
-                print(df.iloc[-1])
                 nums = []
                 for x in df.iloc[-1]:
                     if type(x) is None:
