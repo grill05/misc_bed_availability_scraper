@@ -1139,7 +1139,6 @@ if __name__ == "__main__":
 
                     cmd = 'pdftotext  -layout "' + bulletin + '" tmp.txt'
                     os.system(cmd)
-                    # ~ b=[i for i in open('tmp.txt').readlines() if i]
                     b = [
                         i
                         for i in open(
@@ -1147,6 +1146,7 @@ if __name__ == "__main__":
                         ).readlines()
                         if i
                     ]
+                    os.system("rm -vf tmp.txt {}".format(bulletin))
                     date_line = "COVID-19 STATUS OF ANDAMAN & NICOBAR ISLANDS AS ON"
                     bulletin_date = None
                     for line in b:
