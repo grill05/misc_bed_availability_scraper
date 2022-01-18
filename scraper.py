@@ -1273,11 +1273,12 @@ if __name__ == "__main__":
                         data.total_hospitalization = data.total_hospitalization.astype(
                             "Int64"
                         )
-                        data.index.name = "date_str"
+                        data.index.name = "date"
                         if not os.path.exists("data.nagaland.csv"):
                             data = data.reset_index()
                             data.to_csv("data.nagaland.csv", index=False, header=True)
                         existing_data = pd.read_csv("data.nagaland.csv", index_col=0)
+                        existing_data.index.name = "date"
                         existing_data.total_hospitalization = (
                             existing_data.total_hospitalization.astype("Int64")
                         )
