@@ -629,6 +629,7 @@ if __name__ == "__main__":
         "ladakh",
         "chhattisgarh",
         "nagaland",
+        "an",
     ]
     # List of cities for which the generic writing logic should be executed
     generic_writer_cities = [
@@ -661,6 +662,7 @@ if __name__ == "__main__":
         "puducherry",
         "ladakh",
         "chhattisgarh",
+        "an",
     ]
     # all_cities = [all_cities[-1]]  # Uncomment this to run on the last city/state added
     # generic_writer_cities = [
@@ -1097,6 +1099,102 @@ if __name__ == "__main__":
 
                 print(city + ":")
                 print(row)
+
+            elif city == "an":
+                districts_of_interest = [
+                    "North & Middle Andaman",
+                    "South Andaman",
+                    "Nicobar",
+                ]
+                soup = get_url_failsafe("https://dhs.andaman.gov.in/")
+
+                links = soup.find_all("a", {"target": "_blank"})
+                date = datetime.datetime.now()
+                date_str_target = date.strftime("%d/%m/%Y")
+
+                link_target_text = "A&N ISLANDS HEALTH BULLETIN FOR CONTAINMENT OF COVID-19 ({})".format(
+                    date_str_target
+                )
+                shortlist_link = [
+                    a["href"] for a in links if a.text.startswith(link_target_text)
+                ]
+
+                if len(shortlist_link):
+                    an_pdf = "https://dhs.andaman.gov.in/" + "/" + shortlist_link[0]
+                    date = datetime.datetime.now()
+                    date_str = date.strftime("%Y-%m-%d")
+
+                    print("Downloading pdf..." + an_pdf)
+
+                    response = requests.get(an_pdf)
+                    bulletin = "Andaman_" + str(date_str) + ".pdf"
+                    pdf = open(bulletin, "wb")
+                    pdf.write(response.content)
+                    pdf.close()
+
+                    try:
+                        tables = read_pdf(bulletin, pages=1, silent=True)
+                    except CalledProcessError:
+                        pass
+
+                    cmd = 'pdftotext  -layout "' + bulletin + '" tmp.txt'
+                    os.system(cmd)
+                    # ~ b=[i for i in open('tmp.txt').readlines() if i]
+                    b = [
+                        i
+                        for i in open(
+                            "tmp.txt", encoding="utf-8", errors="ignore"
+                        ).readlines()
+                        if i
+                    ]
+                    date_line = "COVID-19 STATUS OF ANDAMAN & NICOBAR ISLANDS AS ON"
+                    bulletin_date = None
+                    for line in b:
+                        if line.startswith(date_line):
+                            bulletin_date = line.split(date_line)[1].strip()
+                            bulletin_date = datetime.datetime.strptime(
+                                bulletin_date, "%d.%m.%Y"
+                            ).strftime("%Y-%m-%d")
+                            break
+                    if bulletin_date is not None:
+                        for table in tables:
+                            if table.columns[1] == "Isolation Beds":
+                                table.columns = [
+                                    "district",
+                                    "isolation_beds",
+                                    "occupied_beds",
+                                    "vacant_beds",
+                                ]
+                                df = table.loc[
+                                    table.district.isin(districts_of_interest)
+                                ]
+                                df["isolation_beds"] = pd.to_numeric(
+                                    df["isolation_beds"], errors="coerce"
+                                )
+                                df["occupied_beds"] = pd.to_numeric(
+                                    df["occupied_beds"], errors="coerce"
+                                )
+                                df["vacant_beds"] = pd.to_numeric(
+                                    df["vacant_beds"], errors="coerce"
+                                )
+
+                                totals = (
+                                    df.loc[
+                                        :,
+                                        [
+                                            "isolation_beds",
+                                            "occupied_beds",
+                                            "vacant_beds",
+                                        ],
+                                    ]
+                                    .sum(skipna=True)
+                                    .astype(int)
+                                    .tolist()
+                                )
+                                row = (bulletin_date, totals[0], totals[1], totals[2])
+                                print(city + ":")
+                                print(row)
+                                break
             elif city == "nagaland":
                 date = datetime.datetime.now()
                 date_str = date.strftime("%Y-%m-%d")
@@ -2456,7 +2554,8 @@ if __name__ == "__main__":
                     w.writerow(row)
                     a.close()
                     print("Appended to %s :%s" % (csv_fname, str(row)))
-        except:
+        except Exception as e:
+            print(e)
             failed_cities.append(city)
 
     if failed_cities:
