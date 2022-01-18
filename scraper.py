@@ -999,15 +999,19 @@ if __name__ == "__main__":
                     ventilator_beds_total,
                     ventilator_beds_vacant,
                 ) = dff.iloc[-1].tolist()[2:]
+                
+               occupied_isolation_beds=int(isolation_beds_total)-int(isolation_beds_vacant)
+               occupied_o2_beds=int(o2_beds_total)-int(o2_beds_vacant)
+               occupied_ventilator_beds=int(ventilator_beds_total)-int(ventilator_beds_vacant)
 
                 row = (
                     date_str,
                     isolation_beds_total,
-                    isolation_beds_vacant,
+                    occupied_isolation_beds,
                     o2_beds_total,
-                    o2_beds_vacant,
+                    occupied_o2_beds,
                     ventilator_beds_total,
-                    ventilator_beds_vacant,
+                    occupied_ventilator_beds,
                 )
                 print(city + ":")
                 print(row)
