@@ -18,7 +18,7 @@ from bs4 import BeautifulSoup
 # ~ global_proxy='socks4://103.88.221.194:46450'
 # ~ global_proxy = "socks4://49.206.195.204:5678"
 global_proxy = "socks4://111.90.175.13:5678"
-if 'GLOBAL_PROXY' in os.environ: global_proxy=os.environ['GLOBAL_PROXY']
+# ~ if 'GLOBAL_PROXY' in os.environ: global_proxy=os.environ['GLOBAL_PROXY']
     
 # Set timezone globally
 os.environ["TZ"] = "Asia/Kolkata"
