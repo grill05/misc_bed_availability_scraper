@@ -32,80 +32,118 @@ jobs:
         #~ python scraper.py
         
     - name: Scrape BENGALURU beds data
+      if: always()
       run: python scraper.py bengaluru
     - name: Scrape HP beds data
+      if: always()
       run: python scraper.py hp
     - name: Scrape MP beds data
+      if: always()
       run: python scraper.py mp
     - name: Scrape CHENNAI beds data
+      if: always()
       run: python scraper.py chennai
     - name: Scrape PUNE beds data
+      if: always()
       run: python scraper.py pune
     - name: Scrape DELHI beds data
+      if: always()
       run: python scraper.py delhi
     - name: Scrape GBN beds data
+      if: always()
       run: python scraper.py gbn
     - name: Scrape GURUGRAM beds data
+      if: always()
       run: python scraper.py gurugram
     - name: Scrape TN beds data
+      if: always()
       run: python scraper.py tn
     - name: Scrape MUMBAI beds data
+      if: always()
       run: python scraper.py mumbai
     - name: Scrape CHANDIGARH beds data
+      if: always()
       run: python scraper.py chandigarh
     - name: Scrape UTTARAKHAND beds data
+      if: always()
       run: python scraper.py uttarakhand
     - name: Scrape KERALA beds data
+      if: always()
       run: python scraper.py kerala
     - name: Scrape AP beds data
+      if: always()
       run: python scraper.py ap
     - name: Scrape TELANGANA beds data
+      if: always()
       run: python scraper.py telangana
     - name: Scrape NAGPUR beds data
+      if: always()
       run: python scraper.py nagpur
     - name: Scrape NASHIK beds data
+      if: always()
       run: python scraper.py nashik
     - name: Scrape GANDHINAGAR beds data
+      if: always()
       run: python scraper.py gandhinagar
     - name: Scrape VADODARA beds data
+      if: always()
       run: python scraper.py vadodara
     - name: Scrape WB beds data
+      if: always()
       run: python scraper.py wb
     - name: Scrape PB beds data
+      if: always()
       run: python scraper.py pb
     - name: Scrape JAMMU beds data
+      if: always()
       run: python scraper.py jammu
     - name: Scrape GOA beds data
+      if: always()
       run: python scraper.py goa
     - name: Scrape BIHAR beds data
+      if: always()
       run: python scraper.py bihar
     - name: Scrape RAJASTHAN beds data
+      if: always()
       run: python scraper.py rajasthan
     - name: Scrape LUDHIANA beds data
+      if: always()
       run: python scraper.py ludhiana
     - name: Scrape JAMSHEDPUR beds data
+      if: always()
       run: python scraper.py jamshedpur
     - name: Scrape JHARKHAND beds data
+      if: always()
       run: python scraper.py jharkhand
     - name: Scrape MEGHALAYA beds data
+      if: always()
       run: python scraper.py meghalaya
     - name: Scrape UP beds data
+      if: always()
       run: python scraper.py up
     - name: Scrape MANIPUR beds data
+      if: always()
       run: python scraper.py manipur
     - name: Scrape PGIMER beds data
+      if: always()
       run: python scraper.py pgimer
     - name: Scrape AHMEDABAD beds data
+      if: always()
       run: python scraper.py ahmedabad
     - name: Scrape PUDUCHERRY beds data
+      if: always()
       run: python scraper.py puducherry
     - name: Scrape LADAKH beds data
+      if: always()
       run: python scraper.py ladakh
     - name: Scrape CHHATTISGARH beds data
+      if: always()
       run: python scraper.py chhattisgarh
     - name: Scrape NAGALAND beds data
+      if: always()
       run: python scraper.py nagaland
     - name: Scrape AN beds data
+      if: always()
       run: python scraper.py an
    
     - name: Commit modified csv files

@@ -8,7 +8,7 @@ import pandas as pd
 from urllib.parse import unquote
 
 
-import ast, os, requests, time, bs4, datetime, csv, colorama
+import ast, os, requests, time, bs4, datetime, csv, colorama,sys
 from PIL import Image
 import json, time, re, pytz, tqdm
 from bs4 import BeautifulSoup
