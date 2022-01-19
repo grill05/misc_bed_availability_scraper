@@ -75,13 +75,13 @@ def get_data_df(br):
 
 def get_url_failsafe(u, timeout=25, out=""):
     if out:
-        print('downloading %s in get_url_failsafe to %s' %(u,out))
+        print('downloading %s in get_url_failsafe to %s, timeout: %d sec' %(u,out,timeout))
         x = os.popen(
             # ~ "curl --max-time " + str(timeout) + ' -# -k "' + u + '" -o "' + out + '"'
             "curl -s --max-time " + str(timeout) + '  -k "' + u + '" -o "' + out + '"'
         ).read()
     else:
-        print('downloading raw page %s in get_url_failsafe' %(u))
+        print('downloading raw page %s in get_url_failsafe, timeout %d sec' %(u,timeout))
         # ~ x = os.popen("curl --max-time " + str(timeout) + " -# -k " + u).read()
         x = os.popen("curl -s --max-time " + str(timeout) + "  -k " + u).read()
     if out and os.path.exists(out):
@@ -638,6 +638,9 @@ if __name__ == "__main__":
         "nagaland",
         "an",
     ]
+    
+    #override all_cities if one particular city in sys.argv[-1]
+    if sys.argv[-1] in all_cities: all_cities=[sys.argv[-1].strip()]
     # List of cities for which the generic writing logic should be executed
     generic_writer_cities = [
         "mp",
@@ -677,6 +680,8 @@ if __name__ == "__main__":
     # ]  # uncomment this to run the generic writing logic on last city added
     print("all cities: {}".format(all_cities))
     print("generic writer cities: {}".format(generic_writer_cities))
+    
+    #MAIN LOOP
     for city in all_cities:
         # ~ for city in ['up']:
         print("running scraper for: " + city)
@@ -2153,7 +2158,7 @@ if __name__ == "__main__":
                 print(row)
             elif city == "kerala":
                 
-                soup = get_url_failsafe(x)
+                soup = get_url_failsafe('https://covid19jagratha.kerala.nic.in/home/addHospitalDashBoard')
 
                 n = soup("div", attrs={"class": "box"})[1]
                 occupied_normal, tot_normal = (

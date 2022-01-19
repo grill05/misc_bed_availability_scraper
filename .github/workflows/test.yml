@@ -3,9 +3,9 @@ name: CI build
 on:
   schedule:
   - cron:  '12 6 * * *'
-  #~ push:
-    #~ branches:
-      #~ - master
+  push:
+    branches:
+      - master
 
 jobs:
   build:
@@ -13,29 +13,101 @@ jobs:
     env:
       PY_COLORS: "1"
     runs-on: ubuntu-18.04
-    #~ strategy:
-      #~ fail-fast: false
-      #~ max-parallel: 6
-      #~ matrix:
-        #~ python-version: [3.6]
 
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3
       uses: actions/setup-python@v1
       with:
-        #~ python-version: ${{ matrix.python-version }}
         python-version: '3.6'
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         sudo apt-get update&&sudo apt-get install -y poppler-utils phantomjs gnumeric
-    - name: Setup upterm session
-      uses: lhotari/action-upterm@v1    
-    - name: Scrape city beds data
-      run: |
-        python scraper.py
+    #~ - name: Setup upterm session
+      #~ uses: lhotari/action-upterm@v1    
+    #~ - name: Scrape city beds data
+      #~ run: |
+        #~ python scraper.py
+        
+    - name: Scrape BENGALURU beds data
+      run: python scraper.py bengaluru
+    - name: Scrape HP beds data
+      run: python scraper.py hp
+    - name: Scrape MP beds data
+      run: python scraper.py mp
+    - name: Scrape CHENNAI beds data
+      run: python scraper.py chennai
+    - name: Scrape PUNE beds data
+      run: python scraper.py pune
+    - name: Scrape DELHI beds data
+      run: python scraper.py delhi
+    - name: Scrape GBN beds data
+      run: python scraper.py gbn
+    - name: Scrape GURUGRAM beds data
+      run: python scraper.py gurugram
+    - name: Scrape TN beds data
+      run: python scraper.py tn
+    - name: Scrape MUMBAI beds data
+      run: python scraper.py mumbai
+    - name: Scrape CHANDIGARH beds data
+      run: python scraper.py chandigarh
+    - name: Scrape UTTARAKHAND beds data
+      run: python scraper.py uttarakhand
+    - name: Scrape KERALA beds data
+      run: python scraper.py kerala
+    - name: Scrape AP beds data
+      run: python scraper.py ap
+    - name: Scrape TELANGANA beds data
+      run: python scraper.py telangana
+    - name: Scrape NAGPUR beds data
+      run: python scraper.py nagpur
+    - name: Scrape NASHIK beds data
+      run: python scraper.py nashik
+    - name: Scrape GANDHINAGAR beds data
+      run: python scraper.py gandhinagar
+    - name: Scrape VADODARA beds data
+      run: python scraper.py vadodara
+    - name: Scrape WB beds data
+      run: python scraper.py wb
+    - name: Scrape PB beds data
+      run: python scraper.py pb
+    - name: Scrape JAMMU beds data
+      run: python scraper.py jammu
+    - name: Scrape GOA beds data
+      run: python scraper.py goa
+    - name: Scrape BIHAR beds data
+      run: python scraper.py bihar
+    - name: Scrape RAJASTHAN beds data
+      run: python scraper.py rajasthan
+    - name: Scrape LUDHIANA beds data
+      run: python scraper.py ludhiana
+    - name: Scrape JAMSHEDPUR beds data
+      run: python scraper.py jamshedpur
+    - name: Scrape JHARKHAND beds data
+      run: python scraper.py jharkhand
+    - name: Scrape MEGHALAYA beds data
+      run: python scraper.py meghalaya
+    - name: Scrape UP beds data
+      run: python scraper.py up
+    - name: Scrape MANIPUR beds data
+      run: python scraper.py manipur
+    - name: Scrape PGIMER beds data
+      run: python scraper.py pgimer
+    - name: Scrape AHMEDABAD beds data
+      run: python scraper.py ahmedabad
+    - name: Scrape PUDUCHERRY beds data
+      run: python scraper.py puducherry
+    - name: Scrape LADAKH beds data
+      run: python scraper.py ladakh
+    - name: Scrape CHHATTISGARH beds data
+      run: python scraper.py chhattisgarh
+    - name: Scrape NAGALAND beds data
+      run: python scraper.py nagaland
+    - name: Scrape AN beds data
+      run: python scraper.py an
+   
     - name: Commit modified csv files
       if: always()
       run: |
