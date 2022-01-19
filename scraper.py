@@ -287,7 +287,7 @@ def tamil_nadu_auto_parse_latest_bulletin():
         return
     latest_bulletin_url = x[0]("li")[0]("a")[0]["href"].replace("http://", "https://")
     cmd = (
-        'wget --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36" "'
+        'wget -q --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36" "'
         + latest_bulletin_url
         + '"'
     )
@@ -392,7 +392,7 @@ def gurugram_auto_parse_latest_bulletin():
         return
     latest_bulletin_url = x[0]("li")[0]("a")[0]["href"]
     cmd = (
-        'wget --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36" "'
+        'wget -q --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36" "'
         + latest_bulletin_url
         + '"'
     )
@@ -1725,18 +1725,8 @@ if __name__ == "__main__":
                 print(city + ":")
                 print(row)
 
-            elif city == "gandhinagar":
-                x = os.popen(
-                    "curl --max-time 20 -# -k https://vmc.gov.in/HospitalModuleGMC/Default.aspx"
-                ).read()
-                tries = 0
-                while (not x) and tries < 10:
-                    x = os.popen(
-                        "curl --max-time 60 -x "
-                        + global_proxy
-                        + " -# -k https://vmc.gov.in/HospitalModuleGMC/Default.aspx"
-                    ).read()
-                soup = BeautifulSoup(x, "html.parser")
+            elif city == "gandhinagar":                
+                soup = get_url_failsafe('https://vmc.gov.in/HospitalModuleGMC/Default.aspx')
                 x1, x2, x3, vt, vo, vv, it, io, iv, ot, oo, ov, nt, no, nv = [
                     i.text
                     for i in soup("table")[0]("span")
@@ -1746,18 +1736,8 @@ if __name__ == "__main__":
                 print(city + ":")
                 print(row)
 
-            elif city == "vadodara":
-                x = os.popen(
-                    "curl --max-time 20 -# -k  https://vmc.gov.in/covid19vadodaraapp/Default.aspx"
-                ).read()
-                tries = 0
-                while (not x) and tries < 10:
-                    x = os.popen(
-                        "curl --max-time 60 -x "
-                        + global_proxy
-                        + " -# -k https://vmc.gov.in/covid19vadodaraapp/Default.aspx"
-                    ).read()
-                soup = BeautifulSoup(x, "html.parser")
+            elif city == "vadodara":                
+                soup = get_url_failsafe('https://vmc.gov.in/covid19vadodaraapp/Default.aspx')
                 x1, x2, x3, vt, vo, vv, it, io, iv, ot, oo, ov, nt, no, nv, x5 = [
                     i.text
                     for i in soup("table")[0]("span")
@@ -1768,18 +1748,8 @@ if __name__ == "__main__":
                 print(row)
             elif city == "ct":
                 pass
-            elif city == "wb":
-                x = os.popen(
-                    "curl --max-time 15 -# -k https://excise.wb.gov.in/chms/Portal_Default.aspx"
-                ).read()
-                tries = 0
-                while (not x) and tries < 10:
-                    x = os.popen(
-                        "curl --max-time 60 -x "
-                        + global_proxy
-                        + " -# -k https://excise.wb.gov.in/chms/Portal_Default.aspx"
-                    ).read()
-                soup = BeautifulSoup(x, "html.parser")
+            elif city == "wb":                
+                soup = get_url_failsafe('https://excise.wb.gov.in/chms/Portal_Default.aspx')
                 x1, nc, nv, x2 = [
                     i.text.strip() for i in soup("span", attrs={"class": "counter"})
                 ]
@@ -1787,18 +1757,8 @@ if __name__ == "__main__":
                 row = (date_str, nc, no)
                 print(city + ":")
                 print(row)
-            elif city == "nashik":
-                x = os.popen(
-                    "curl --max-time 15 -# -k https://covidcbrs.nmc.gov.in/home/hospitalSummary"
-                ).read()
-                tries = 0
-                while (not x) and tries < 10:
-                    x = os.popen(
-                        "curl --max-time 60 -x "
-                        + global_proxy
-                        + " -# -k https://covidcbrs.nmc.gov.in/home/hospitalSummary"
-                    ).read()
-                soup = BeautifulSoup(x, "html.parser")
+            elif city == "nashik":            
+                soup = get_url_failsafe('https://covidcbrs.nmc.gov.in/home/hospitalSummary')
                 x1, x2, x3, x4, nt, nv, ot, ov, it, iv, vt, vv = [
                     i.text.strip() for i in soup("tfoot")[0]("th")
                 ]
@@ -1838,18 +1798,8 @@ if __name__ == "__main__":
                 row = (date_str, tot_normal, tot_icu, occupied_normal, occupied_icu)
                 print(city + ":")
                 print(row)
-            elif city == "jammu":
-                x = os.popen(
-                    "curl --max-time 30 -# -k https://covidrelief.jk.gov.in/Beds/Hospitals/JAMMU"
-                ).read()
-                tries = 0
-                while (not x) and tries < 10:
-                    x = os.popen(
-                        "curl --max-time 60 -x "
-                        + global_proxy
-                        + " -# -k https://covidrelief.jk.gov.in/Beds/Hospitals/JAMMU"
-                    ).read()
-                soup = BeautifulSoup(x, "html.parser")
+            elif city == "jammu":                
+                soup = get_url_failsafe('https://covidrelief.jk.gov.in/Beds/Hospitals/JAMMU')
                 jammu_hospitals = [
                     "https://covidrelief.jk.gov.in/Beds/Hospitals/Hospital/609382b4f64c7a2d446721ec",
                     "https://covidrelief.jk.gov.in/Beds/Hospitals/Hospital/609381cbb1c6502bfe8c3c5f",
@@ -1859,17 +1809,8 @@ if __name__ == "__main__":
                     "https://covidrelief.jk.gov.in/Beds/Hospitals/Hospital/60bb02f17b6808683a6284e0",
                 ]
                 tnc = tic = tno = too = tio = 0
-                for hospital in jammu_hospitals:
-                    x = os.popen("curl --max-time 30 -# -k " + hospital).read()
-                    tries = 0
-                    while (not x) and tries < 10:
-                        x = os.popen(
-                            "curl --max-time 60 -x "
-                            + global_proxy
-                            + " -# -k "
-                            + hospital
-                        ).read()
-                    soup = BeautifulSoup(x, "html.parser")
+                for hospital in jammu_hospitals:                    
+                    soup = get_url_failsafe(hospital)
                     try:
                         x1, x2, x3, nc, nv, ic, iv, oo = [
                             i("td")[1].text
@@ -1889,10 +1830,7 @@ if __name__ == "__main__":
                 row = (date_str, tnc, tic, tno, too, tio)
                 print(city + ":")
                 print(row)
-            elif city == "nagpur":
-                # ~ x=os.popen('curl --max-time 30 -# -k https://nsscdcl.org/covidbeds/').read()
-                # ~ tries=0
-                # ~ while (not x) and tries<10: x=os.popen('curl --max-time 60 -x '+global_proxy+' -# -k https://nsscdcl.org/covidbeds/').read()
+            elif city == "nagpur":                
 
                 soup = get_url_failsafe("https://nsscdcl.org/covidbeds/", 20)
                 oa = (
@@ -2092,11 +2030,8 @@ if __name__ == "__main__":
                         "could not get data from https://coronabeds.jantasamvad.org/covid-info.js"
                     )
 
-            elif city == "pune":
-                x = os.popen(
-                    "curl -# -k https://divcommpunecovid.com/ccsbeddashboard/hsr"
-                ).read()
-                soup = BeautifulSoup(x, "html.parser")
+            elif city == "pune":                
+                soup = get_url_failsafe('https://divcommpunecovid.com/ccsbeddashboard/hsr')
                 xx = soup("legend")[1].parent
                 xx = xx("table")[0]
                 (
@@ -2181,10 +2116,8 @@ if __name__ == "__main__":
                         "Failed to download/scrape AP data from http://dashboard.covid19.ap.gov.in/ims/hospbed_reports/ !!"
                     )
             elif city == "telangana":
-                x = os.popen(
-                    "curl -# -k http://164.100.112.24/SpringMVC/Hospital_Beds_Statistic_Bulletin_citizen.htm"
-                ).read()
-                soup = BeautifulSoup(x, "html.parser")
+                
+                soup = get_url_failsafe('http://164.100.112.24/SpringMVC/Hospital_Beds_Statistic_Bulletin_citizen.htm')
                 try:
                     (
                         xyz,
@@ -2218,10 +2151,8 @@ if __name__ == "__main__":
                 print(city + ":")
                 print(row)
             elif city == "kerala":
-                x = os.popen(
-                    "curl -# -k https://covid19jagratha.kerala.nic.in/home/addHospitalDashBoard"
-                ).read()
-                soup = BeautifulSoup(x, "html.parser")
+                
+                soup = get_url_failsafe(x)
 
                 n = soup("div", attrs={"class": "box"})[1]
                 occupied_normal, tot_normal = (
@@ -2257,10 +2188,8 @@ if __name__ == "__main__":
                 print(row)
 
             elif city == "uttarakhand":
-                x = os.popen(
-                    "curl -# -k https://covid19.uk.gov.in/bedssummary.aspx"
-                ).read()
-                soup = BeautifulSoup(x, "html.parser")
+                
+                soup = get_url_failsafe('https://covid19.uk.gov.in/bedssummary.aspx')
 
                 n = soup("div", attrs={"id": "ContentPlaceHolder1_divIsolation"})[0]
                 xz1, tot_normal, xz2, vacant_normal = [i.text for i in n("span")]
@@ -2293,10 +2222,8 @@ if __name__ == "__main__":
                 print(row)
 
             elif city == "chandigarh":
-                x = os.popen(
-                    "curl -# -k http://chdcovid19.in/chdcovidbed19/index.php/home/stats"
-                ).read()
-                soup = BeautifulSoup(x, "html.parser")
+                
+                soup = get_url_failsafe("http://chdcovid19.in/chdcovidbed19/index.php/home/stats")
                 table = soup("table")[0]
 
                 # ~ toc=tvc=tic=tnc=0
@@ -2318,10 +2245,8 @@ if __name__ == "__main__":
                 row = (date_str, tnc, toc, tic, tvc, tno, too, tio, tvo)
                 print(city + " : " + str(row))
             elif city == "hp":
-                x = os.popen(
-                    "curl -# -k https://covidcapacity.hp.gov.in/index.php"
-                ).read()
-                soup = BeautifulSoup(x, "html.parser")
+                
+                soup = get_url_failsafe('https://covidcapacity.hp.gov.in/index.php')
                 xx = soup("a", attrs={"id": "oxygenbedmodel"})[0]
                 tot_o2 = int(xx.parent.parent("td")[0].text)
                 occupied_o2 = int(xx.parent.parent("td")[1].text)
@@ -2343,10 +2268,8 @@ if __name__ == "__main__":
                 print(city + ":")
                 print(row)
             elif city == "mp":
-                x = os.popen(
-                    "curl -# -k http://sarthak.nhmmp.gov.in/covid/facility-bed-occupancy-dashboard/"
-                ).read()
-                soup = BeautifulSoup(x, "html.parser")
+                
+                soup = get_url_failsafe("http://sarthak.nhmmp.gov.in/covid/facility-bed-occupancy-dashboard/")
                 xx = soup(
                     "a",
                     attrs={
