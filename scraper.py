@@ -16,7 +16,8 @@ from bs4 import BeautifulSoup
 
 # ~ global_proxy='socks4://157.119.201.231:1080'
 # ~ global_proxy='socks4://103.88.221.194:46450'
-global_proxy = "socks4://49.206.195.204:5678"
+# ~ global_proxy = "socks4://49.206.195.204:5678"
+global_proxy = "socks4://111.90.175.13:5678"
 
 # Set timezone globally
 os.environ["TZ"] = "Asia/Kolkata"
@@ -435,14 +436,14 @@ def mumbai_bulletin_auto_parser(bulletin="", proxy=global_proxy):
         if os.path.exists("Dashboard.pdf"):
             bulletin = "Dashboard.pdf"
 
-    max_tries = 100
+    max_tries = 10
     tries = 0
     if os.path.exists(bulletin):
         print("todays bulletin already exists.nothing to download")
     else:
         while (not os.path.exists(bulletin)) and (tries < max_tries):
             cmd = (
-                'curl -#  -O  -k -x "'
+                'curl -# --max-time 60 -O  -k -x "'
                 + proxy
                 + '" "https://stopcoronavirus.mcgm.gov.in/assets/docs/Dashboard.pdf"'
             )
