@@ -12,6 +12,7 @@ jobs:
 
     env:
       PY_COLORS: "1"
+      GLOBAL_PROXY: ${{ secrets.GLOBAL_PROXY }}
     runs-on: ubuntu-18.04
 
     steps:

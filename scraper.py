@@ -18,7 +18,8 @@ from bs4 import BeautifulSoup
 # ~ global_proxy='socks4://103.88.221.194:46450'
 # ~ global_proxy = "socks4://49.206.195.204:5678"
 global_proxy = "socks4://111.90.175.13:5678"
-
+if 'GLOBAL_PROXY' in os.environ: global_proxy=os.environ['GLOBAL_PROXY']
+    
 # Set timezone globally
 os.environ["TZ"] = "Asia/Kolkata"
 time.tzset()
@@ -679,7 +680,7 @@ if __name__ == "__main__":
     #    generic_writer_cities[-1]
     # ]  # uncomment this to run the generic writing logic on last city added
     print("all cities: {}".format(all_cities))
-    print("generic writer cities: {}".format(generic_writer_cities))
+    if len(all_cities)>2: print("generic writer cities: {}".format(generic_writer_cities))
     
     #MAIN LOOP
     for city in all_cities:
