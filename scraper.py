@@ -74,11 +74,15 @@ def get_data_df(br):
 
 def get_url_failsafe(u, timeout=25, out=""):
     if out:
+        print('downloading %s in get_url_failsafe to %s' $(u,out))
         x = os.popen(
-            "curl --max-time " + str(timeout) + ' -# -k "' + u + '" -o "' + out + '"'
+            # ~ "curl --max-time " + str(timeout) + ' -# -k "' + u + '" -o "' + out + '"'
+            "curl -s --max-time " + str(timeout) + '  -k "' + u + '" -o "' + out + '"'
         ).read()
     else:
-        x = os.popen("curl --max-time " + str(timeout) + " -# -k " + u).read()
+        print('downloading raw page %s in get_url_failsafe' $(u))
+        # ~ x = os.popen("curl --max-time " + str(timeout) + " -# -k " + u).read()
+        x = os.popen("curl -s --max-time " + str(timeout) + "  -k " + u).read()
     if out and os.path.exists(out):
         x = True
 
@@ -94,7 +98,8 @@ def get_url_failsafe(u, timeout=25, out=""):
                 + str(2 * timeout)
                 + " -x "
                 + global_proxy
-                + ' -# -k "'
+                # ~ + ' -# -k "'
+                + ' -s -k "'
                 + u
                 + '" -o "'
                 + out
@@ -106,7 +111,8 @@ def get_url_failsafe(u, timeout=25, out=""):
                 + str(2 * timeout)
                 + " -x "
                 + global_proxy
-                + ' -# -k "'
+                # ~ + ' -# -k "'
+                + ' -s -k "'
                 + u
                 + '"'
             ).read()
