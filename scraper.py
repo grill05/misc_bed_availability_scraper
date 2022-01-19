@@ -287,7 +287,7 @@ def tamil_nadu_auto_parse_latest_bulletin():
         return
     latest_bulletin_url = x[0]("li")[0]("a")[0]["href"].replace("http://", "https://")
     cmd = (
-        'wget -q --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36" "'
+        'wget  --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36" "'
         + latest_bulletin_url
         + '"'
     )
