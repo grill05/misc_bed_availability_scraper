@@ -1364,19 +1364,21 @@ if __name__ == "__main__":
             elif city == "rajasthan":
                 soup = get_url_failsafe(
                     "https://covidinfo.rajasthan.gov.in/Covid-19hospital-wisebedposition-wholeRajasthan.aspx",
-                    75,
+                    105,
                 )
-                hosp = [
-                    " ".join([j.text for j in row("td")])
-                    for row in soup("table")[0]("tr")
-                ][3:]
-                recent_update = [
-                    i
-                    for i in hosp
-                    if i.split()[-1] != "N/A"
-                    and datetime.datetime.strptime(i.split()[-2], "%d-%m-%Y")
-                    >= datetime.datetime.now() - datetime.timedelta(days=2)
-                ]
+                y=pd.read_html(str(soup('table')[0]), flavor="bs4")[0]
+                recent_update = [list(y.iloc[i]) for i in range(1,len(y)) if str(list(y.iloc[i])[-1]).split()[0]!='nan' and  datetime.datetime.strptime(str(list(y.iloc[i])[-1]).split()[0],"%d-%m-%Y")>= datetime.datetime.now() - datetime.timedelta(days=2)]
+                # ~ hosp = [
+                    # ~ " ".join([j.text for j in row("td")])
+                    # ~ for row in soup("table")[0]("tr")
+                # ~ ][3:]
+                # ~ recent_update = [
+                    # ~ i
+                    # ~ for i in hosp
+                    # ~ if i.split()[-1] != "N/A"
+                    # ~ and datetime.datetime.strptime(i.split()[-2], "%d-%m-%Y")
+                    # ~ >= datetime.datetime.now() - datetime.timedelta(days=2)
+                # ~ ]
                 tot_normal = 0
                 tot_o2 = 0
                 tot_icu = 0
@@ -1400,7 +1402,7 @@ if __name__ == "__main__":
                             tot_vent0,
                             occupied_vent0,
                             x4,
-                        ) = i.split()[-16:-4]
+                        ) = i[3:15]
                         tot_normal += int(tot_normal0)
                         tot_o2 += int(tot_o20)
                         tot_icu += int(tot_icu0)
