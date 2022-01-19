@@ -8,7 +8,7 @@ import pandas as pd
 from urllib.parse import unquote
 
 
-import ast, os, requests, time, bs4, datetime, csv, colorama,sys
+import ast, os, requests, time, bs4, datetime, csv, colorama, sys
 from PIL import Image
 import json, time, re, pytz, tqdm
 from bs4 import BeautifulSoup
@@ -19,7 +19,7 @@ from bs4 import BeautifulSoup
 # ~ global_proxy = "socks4://49.206.195.204:5678"
 global_proxy = "socks4://111.90.175.13:5678"
 # ~ if 'GLOBAL_PROXY' in os.environ: global_proxy=os.environ['GLOBAL_PROXY']
-    
+
 # Set timezone globally
 os.environ["TZ"] = "Asia/Kolkata"
 time.tzset()
@@ -76,13 +76,24 @@ def get_data_df(br):
 
 def get_url_failsafe(u, timeout=25, out=""):
     if out:
-        print('downloading %s in get_url_failsafe to %s, timeout: %d sec' %(u,out,timeout))
+        print(
+            "downloading %s in get_url_failsafe to %s, timeout: %d sec"
+            % (u, out, timeout)
+        )
         x = os.popen(
             # ~ "curl --max-time " + str(timeout) + ' -# -k "' + u + '" -o "' + out + '"'
-            "curl -s --max-time " + str(timeout) + '  -k "' + u + '" -o "' + out + '"'
+            "curl -s --max-time "
+            + str(timeout)
+            + '  -k "'
+            + u
+            + '" -o "'
+            + out
+            + '"'
         ).read()
     else:
-        print('downloading raw page %s in get_url_failsafe, timeout %d sec' %(u,timeout))
+        print(
+            "downloading raw page %s in get_url_failsafe, timeout %d sec" % (u, timeout)
+        )
         # ~ x = os.popen("curl --max-time " + str(timeout) + " -# -k " + u).read()
         x = os.popen("curl -s --max-time " + str(timeout) + "  -k " + u).read()
     if out and os.path.exists(out):
@@ -639,9 +650,10 @@ if __name__ == "__main__":
         "nagaland",
         "an",
     ]
-    
-    #override all_cities if one particular city in sys.argv[-1]
-    if sys.argv[-1] in all_cities: all_cities=[sys.argv[-1].strip()]
+
+    # override all_cities if one particular city in sys.argv[-1]
+    if sys.argv[-1] in all_cities:
+        all_cities = [sys.argv[-1].strip()]
     # List of cities for which the generic writing logic should be executed
     generic_writer_cities = [
         "mp",
@@ -680,9 +692,10 @@ if __name__ == "__main__":
     #    generic_writer_cities[-1]
     # ]  # uncomment this to run the generic writing logic on last city added
     print("all cities: {}".format(all_cities))
-    if len(all_cities)>2: print("generic writer cities: {}".format(generic_writer_cities))
-    
-    #MAIN LOOP
+    if len(all_cities) > 2:
+        print("generic writer cities: {}".format(generic_writer_cities))
+
+    # MAIN LOOP
     for city in all_cities:
         # ~ for city in ['up']:
         print("running scraper for: " + city)
@@ -1379,18 +1392,26 @@ if __name__ == "__main__":
                     "https://covidinfo.rajasthan.gov.in/Covid-19hospital-wisebedposition-wholeRajasthan.aspx",
                     105,
                 )
-                y=pd.read_html(str(soup('table')[0]), flavor="bs4")[0]
-                recent_update = [list(y.iloc[i]) for i in range(1,len(y)) if str(list(y.iloc[i])[-1]).split()[0]!='nan' and  datetime.datetime.strptime(str(list(y.iloc[i])[-1]).split()[0],"%d-%m-%Y")>= datetime.datetime.now() - datetime.timedelta(days=2)]
+                y = pd.read_html(str(soup("table")[0]), flavor="bs4")[0]
+                recent_update = [
+                    list(y.iloc[i])
+                    for i in range(1, len(y))
+                    if str(list(y.iloc[i])[-1]).split()[0] != "nan"
+                    and datetime.datetime.strptime(
+                        str(list(y.iloc[i])[-1]).split()[0], "%d-%m-%Y"
+                    )
+                    >= datetime.datetime.now() - datetime.timedelta(days=2)
+                ]
                 # ~ hosp = [
-                    # ~ " ".join([j.text for j in row("td")])
-                    # ~ for row in soup("table")[0]("tr")
+                # ~ " ".join([j.text for j in row("td")])
+                # ~ for row in soup("table")[0]("tr")
                 # ~ ][3:]
                 # ~ recent_update = [
-                    # ~ i
-                    # ~ for i in hosp
-                    # ~ if i.split()[-1] != "N/A"
-                    # ~ and datetime.datetime.strptime(i.split()[-2], "%d-%m-%Y")
-                    # ~ >= datetime.datetime.now() - datetime.timedelta(days=2)
+                # ~ i
+                # ~ for i in hosp
+                # ~ if i.split()[-1] != "N/A"
+                # ~ and datetime.datetime.strptime(i.split()[-2], "%d-%m-%Y")
+                # ~ >= datetime.datetime.now() - datetime.timedelta(days=2)
                 # ~ ]
                 tot_normal = 0
                 tot_o2 = 0
@@ -1732,8 +1753,10 @@ if __name__ == "__main__":
                 print(city + ":")
                 print(row)
 
-            elif city == "gandhinagar":                
-                soup = get_url_failsafe('https://vmc.gov.in/HospitalModuleGMC/Default.aspx')
+            elif city == "gandhinagar":
+                soup = get_url_failsafe(
+                    "https://vmc.gov.in/HospitalModuleGMC/Default.aspx"
+                )
                 x1, x2, x3, vt, vo, vv, it, io, iv, ot, oo, ov, nt, no, nv = [
                     i.text
                     for i in soup("table")[0]("span")
@@ -1743,8 +1766,10 @@ if __name__ == "__main__":
                 print(city + ":")
                 print(row)
 
-            elif city == "vadodara":                
-                soup = get_url_failsafe('https://vmc.gov.in/covid19vadodaraapp/Default.aspx')
+            elif city == "vadodara":
+                soup = get_url_failsafe(
+                    "https://vmc.gov.in/covid19vadodaraapp/Default.aspx"
+                )
                 x1, x2, x3, vt, vo, vv, it, io, iv, ot, oo, ov, nt, no, nv, x5 = [
                     i.text
                     for i in soup("table")[0]("span")
@@ -1755,8 +1780,10 @@ if __name__ == "__main__":
                 print(row)
             elif city == "ct":
                 pass
-            elif city == "wb":                
-                soup = get_url_failsafe('https://excise.wb.gov.in/chms/Portal_Default.aspx')
+            elif city == "wb":
+                soup = get_url_failsafe(
+                    "https://excise.wb.gov.in/chms/Portal_Default.aspx"
+                )
                 x1, nc, nv, x2 = [
                     i.text.strip() for i in soup("span", attrs={"class": "counter"})
                 ]
@@ -1764,8 +1791,10 @@ if __name__ == "__main__":
                 row = (date_str, nc, no)
                 print(city + ":")
                 print(row)
-            elif city == "nashik":            
-                soup = get_url_failsafe('https://covidcbrs.nmc.gov.in/home/hospitalSummary')
+            elif city == "nashik":
+                soup = get_url_failsafe(
+                    "https://covidcbrs.nmc.gov.in/home/hospitalSummary"
+                )
                 x1, x2, x3, x4, nt, nv, ot, ov, it, iv, vt, vv = [
                     i.text.strip() for i in soup("tfoot")[0]("th")
                 ]
@@ -1805,8 +1834,10 @@ if __name__ == "__main__":
                 row = (date_str, tot_normal, tot_icu, occupied_normal, occupied_icu)
                 print(city + ":")
                 print(row)
-            elif city == "jammu":                
-                soup = get_url_failsafe('https://covidrelief.jk.gov.in/Beds/Hospitals/JAMMU')
+            elif city == "jammu":
+                soup = get_url_failsafe(
+                    "https://covidrelief.jk.gov.in/Beds/Hospitals/JAMMU"
+                )
                 jammu_hospitals = [
                     "https://covidrelief.jk.gov.in/Beds/Hospitals/Hospital/609382b4f64c7a2d446721ec",
                     "https://covidrelief.jk.gov.in/Beds/Hospitals/Hospital/609381cbb1c6502bfe8c3c5f",
@@ -1816,7 +1847,7 @@ if __name__ == "__main__":
                     "https://covidrelief.jk.gov.in/Beds/Hospitals/Hospital/60bb02f17b6808683a6284e0",
                 ]
                 tnc = tic = tno = too = tio = 0
-                for hospital in jammu_hospitals:                    
+                for hospital in jammu_hospitals:
                     soup = get_url_failsafe(hospital)
                     try:
                         x1, x2, x3, nc, nv, ic, iv, oo = [
@@ -1837,7 +1868,7 @@ if __name__ == "__main__":
                 row = (date_str, tnc, tic, tno, too, tio)
                 print(city + ":")
                 print(row)
-            elif city == "nagpur":                
+            elif city == "nagpur":
 
                 soup = get_url_failsafe("https://nsscdcl.org/covidbeds/", 20)
                 oa = (
@@ -2037,8 +2068,10 @@ if __name__ == "__main__":
                         "could not get data from https://coronabeds.jantasamvad.org/covid-info.js"
                     )
 
-            elif city == "pune":                
-                soup = get_url_failsafe('https://divcommpunecovid.com/ccsbeddashboard/hsr')
+            elif city == "pune":
+                soup = get_url_failsafe(
+                    "https://divcommpunecovid.com/ccsbeddashboard/hsr"
+                )
                 xx = soup("legend")[1].parent
                 xx = xx("table")[0]
                 (
@@ -2123,8 +2156,10 @@ if __name__ == "__main__":
                         "Failed to download/scrape AP data from http://dashboard.covid19.ap.gov.in/ims/hospbed_reports/ !!"
                     )
             elif city == "telangana":
-                
-                soup = get_url_failsafe('http://164.100.112.24/SpringMVC/Hospital_Beds_Statistic_Bulletin_citizen.htm')
+
+                soup = get_url_failsafe(
+                    "http://164.100.112.24/SpringMVC/Hospital_Beds_Statistic_Bulletin_citizen.htm"
+                )
                 try:
                     (
                         xyz,
@@ -2158,8 +2193,10 @@ if __name__ == "__main__":
                 print(city + ":")
                 print(row)
             elif city == "kerala":
-                
-                soup = get_url_failsafe('https://covid19jagratha.kerala.nic.in/home/addHospitalDashBoard')
+
+                soup = get_url_failsafe(
+                    "https://covid19jagratha.kerala.nic.in/home/addHospitalDashBoard"
+                )
 
                 n = soup("div", attrs={"class": "box"})[1]
                 occupied_normal, tot_normal = (
@@ -2195,8 +2232,8 @@ if __name__ == "__main__":
                 print(row)
 
             elif city == "uttarakhand":
-                
-                soup = get_url_failsafe('https://covid19.uk.gov.in/bedssummary.aspx')
+
+                soup = get_url_failsafe("https://covid19.uk.gov.in/bedssummary.aspx")
 
                 n = soup("div", attrs={"id": "ContentPlaceHolder1_divIsolation"})[0]
                 xz1, tot_normal, xz2, vacant_normal = [i.text for i in n("span")]
@@ -2229,8 +2266,10 @@ if __name__ == "__main__":
                 print(row)
 
             elif city == "chandigarh":
-                
-                soup = get_url_failsafe("http://chdcovid19.in/chdcovidbed19/index.php/home/stats")
+
+                soup = get_url_failsafe(
+                    "http://chdcovid19.in/chdcovidbed19/index.php/home/stats"
+                )
                 table = soup("table")[0]
 
                 # ~ toc=tvc=tic=tnc=0
@@ -2252,8 +2291,8 @@ if __name__ == "__main__":
                 row = (date_str, tnc, toc, tic, tvc, tno, too, tio, tvo)
                 print(city + " : " + str(row))
             elif city == "hp":
-                
-                soup = get_url_failsafe('https://covidcapacity.hp.gov.in/index.php')
+
+                soup = get_url_failsafe("https://covidcapacity.hp.gov.in/index.php")
                 xx = soup("a", attrs={"id": "oxygenbedmodel"})[0]
                 tot_o2 = int(xx.parent.parent("td")[0].text)
                 occupied_o2 = int(xx.parent.parent("td")[1].text)
@@ -2275,8 +2314,10 @@ if __name__ == "__main__":
                 print(city + ":")
                 print(row)
             elif city == "mp":
-                
-                soup = get_url_failsafe("http://sarthak.nhmmp.gov.in/covid/facility-bed-occupancy-dashboard/")
+
+                soup = get_url_failsafe(
+                    "http://sarthak.nhmmp.gov.in/covid/facility-bed-occupancy-dashboard/"
+                )
                 xx = soup(
                     "a",
                     attrs={
