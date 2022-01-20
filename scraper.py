@@ -990,6 +990,7 @@ if __name__ == "__main__":
                 )
                 print(city + ":")
                 print(row)
+                archive_raw_source(city,str(soup))
             elif city == "ahmedabad":
                 url = "https://ahmedabadcity.gov.in/portal/COVID19.jsp"
                 options = webdriver.ChromeOptions()
@@ -1019,6 +1020,7 @@ if __name__ == "__main__":
                 print(city + ":")
                 print(row)
                 os.system("rm -rf *.pdf")
+                archive_raw_source(city,str(soup))
             elif city == "puducherry":
                 date = datetime.datetime.now()
                 date_str = date.strftime("%Y-%m-%d")
@@ -1062,6 +1064,7 @@ if __name__ == "__main__":
                 )
                 print(city + ":")
                 print(row)
+                archive_raw_source(city,str(soup))
             elif city == "ladakh":
                 date = datetime.datetime.now()
                 date_str = date.strftime("%Y-%m-%d")
@@ -1094,6 +1097,7 @@ if __name__ == "__main__":
                 )
                 print(city + ":")
                 print(row)
+                archive_raw_source(city,str(soup))
             elif city == "chhattisgarh":
                 date = datetime.datetime.now()
                 date_str = date.strftime("%Y-%m-%d")
@@ -1140,6 +1144,7 @@ if __name__ == "__main__":
 
                 print(city + ":")
                 print(row)
+                archive_raw_source(city,str(soup))
 
             elif city == "an":
                 districts_of_interest = [
@@ -1246,6 +1251,7 @@ if __name__ == "__main__":
                 br.get("https://covid19.nagaland.gov.in/charts")
 
                 soup = BeautifulSoup(br.page_source, "lxml")
+                archive_raw_source(city,str(soup))
                 scpt = soup.select("script")
 
                 for itern, s in enumerate(scpt):
@@ -1475,6 +1481,7 @@ if __name__ == "__main__":
                 )
                 print(city + ":")
                 print(row)
+                archive_raw_source(city,str(soup))
             elif city == "up":
                 options = webdriver.ChromeOptions()
                 options.add_argument("--ignore-certificate-errors")
@@ -1733,6 +1740,7 @@ if __name__ == "__main__":
                 )
                 print(city + ":")
                 print(row)
+                archive_raw_source(city,str(soup))
             elif city == "bihar":
                 soup = get_url_failsafe(
                     "https://covid19health.bihar.gov.in/DailyDashboard/BedsOccupied", 60
@@ -1767,6 +1775,7 @@ if __name__ == "__main__":
                 row = (date_str, tot_beds, tot_icu, occupied_beds, occupied_icu)
                 print(city + ":")
                 print(row)
+                archive_raw_source(city,str(soup))
 
             elif city == "gandhinagar":
                 soup = get_url_failsafe(
@@ -1793,8 +1802,8 @@ if __name__ == "__main__":
                 row = (date_str, nt, ot, it, vt, no, oo, io, vo)
                 print(city + ":")
                 print(row)
-            elif city == "ct":
-                pass
+                archive_raw_source(city,str(soup))
+           
             elif city == "wb":
                 soup = get_url_failsafe(
                     "https://excise.wb.gov.in/chms/Portal_Default.aspx"
@@ -1820,6 +1829,7 @@ if __name__ == "__main__":
                 row = (date_str, nt, ot, it, vt, no, oo, io, vo)
                 print(city + ":")
                 print(row)
+                archive_raw_source(city,str(soup))
             elif city == "goa":
                 soup = get_url_failsafe("https://goaonline.gov.in/beds")
                 table = soup("table")[1]
@@ -1849,6 +1859,7 @@ if __name__ == "__main__":
                 row = (date_str, tot_normal, tot_icu, occupied_normal, occupied_icu)
                 print(city + ":")
                 print(row)
+                archive_raw_source(city,str(soup))
             elif city == "jammu":
                 soup = get_url_failsafe(
                     "https://covidrelief.jk.gov.in/Beds/Hospitals/JAMMU"
@@ -1937,6 +1948,7 @@ if __name__ == "__main__":
                 row = (date_str, nc, oc, ic, vc, no, oo, io, vo)
                 print(city + ":")
                 print(row)
+                archive_raw_source(city,str(soup))
             elif city == "mumbai":
                 mumbai_bulletin_auto_parser()
             elif city == "gbn":
@@ -2078,6 +2090,7 @@ if __name__ == "__main__":
                         a = open("data.delhi.csv", "a")
                         a.write(info + "\n")
                         a.close()
+                    archive_raw_source(city,y)
                 else:
                     print(
                         "could not get data from https://coronabeds.jantasamvad.org/covid-info.js"
@@ -2130,13 +2143,18 @@ if __name__ == "__main__":
                 )
                 print(city + ":")
                 print(row)
+                archive_raw_source(city,str(soup))
             elif city == "ap":
                 try:
-                    br = webdriver.PhantomJS()
+                    options = webdriver.ChromeOptions()
+                    options.add_argument("--ignore-certificate-errors")
+                    options.add_argument("--headless")
+                    br = webdriver.Chrome(chrome_options=options)
                     br.get("http://dashboard.covid19.ap.gov.in/ims/hospbed_reports//")
                     time.sleep(3)
                     x = br.page_source
                     soup = BeautifulSoup(x, "html.parser")
+                    
                     (
                         xyz,
                         number_of_hospitals,
@@ -2166,6 +2184,7 @@ if __name__ == "__main__":
                     )
                     print(city + ":")
                     print(row)
+                    archive_raw_source(city,str(soup))
                 except:
                     print(
                         "Failed to download/scrape AP data from http://dashboard.covid19.ap.gov.in/ims/hospbed_reports/ !!"
@@ -2207,6 +2226,7 @@ if __name__ == "__main__":
                 )
                 print(city + ":")
                 print(row)
+                archive_raw_source(city,str(soup))
             elif city == "kerala":
 
                 soup = get_url_failsafe(
@@ -2285,6 +2305,7 @@ if __name__ == "__main__":
                 )
                 print(city + ":")
                 print(row)
+                archive_raw_source(city,str(soup))
 
             elif city == "chandigarh":
 
@@ -2311,6 +2332,7 @@ if __name__ == "__main__":
                     )
                 row = (date_str, tnc, toc, tic, tvc, tno, too, tio, tvo)
                 print(city + " : " + str(row))
+                archive_raw_source(city,str(soup))
             elif city == "hp":
 
                 soup = get_url_failsafe("https://covidcapacity.hp.gov.in/index.php")
@@ -2334,6 +2356,7 @@ if __name__ == "__main__":
                 )
                 print(city + ":")
                 print(row)
+                archive_raw_source(city,str(soup))
             elif city == "mp":
 
                 soup = get_url_failsafe(
@@ -2367,6 +2390,7 @@ if __name__ == "__main__":
                 )
                 print(city + ":")
                 print(row)
+                archive_raw_source(city,str(soup))
             elif city == "ludhiana":
 
                 soup = get_url_failsafe("https://ludhiana.nic.in/bed-status/")
