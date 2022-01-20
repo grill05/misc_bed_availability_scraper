@@ -2199,24 +2199,29 @@ if __name__ == "__main__":
                 )
 
                 n = soup("div", attrs={"class": "box"})[1]
-                occupied_normal, tot_normal = (
+                vacant_normal, tot_normal = (
                     n("p")[0].text.replace(n("label")[0].text, "").strip().split("/")
                 )
 
                 n = soup("div", attrs={"class": "box"})[2]
-                occupied_icu, tot_icu = (
+                vacant_icu, tot_icu = (
                     n("p")[0].text.replace(n("label")[0].text, "").strip().split("/")
                 )
 
                 n = soup("div", attrs={"class": "box"})[3]
-                occupied_vent, tot_vent = (
+                vacant_vent, tot_vent = (
                     n("p")[0].text.replace(n("label")[0].text, "").strip().split("/")
                 )
 
                 n = soup("div", attrs={"class": "box"})[4]
-                occupied_o2, tot_o2 = (
+                vacant_o2, tot_o2 = (
                     n("p")[0].text.replace(n("label")[0].text, "").strip().split("/")
                 )
+                occupied_normal=int(tot_normal)-int(vacant_normal)
+                occupied_o2=int(tot_o2)-int(vacant_o2)
+                occupied_icu=int(tot_icu)-int(vacant_icu)                
+                occupied_vent=int(tot_vent)-int(vacant_vent)
+                
                 row = (
                     date_str,
                     tot_normal,
