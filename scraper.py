@@ -1369,6 +1369,7 @@ if __name__ == "__main__":
                 os.system('curl -# -k "' + links[0] + '" -o tmp.xlsx')
                 os.system("ssconvert tmp.xlsx tmp.csv")
                 x = pd.read_csv("tmp.csv")
+                archive_str=open('tmp.csv').read()
                 summary = list(x.iloc[len(x) - 1][3:-4])
                 tot_o2 = int(summary[0])
                 tot_icu = int(summary[8])
@@ -1380,6 +1381,7 @@ if __name__ == "__main__":
 
                 os.system('curl -# -k "' + links[1] + '" -o tmp.xlsx')
                 os.system("ssconvert tmp.xlsx tmp.csv")
+                archive_str+='\n\n\n'+open('tmp.csv').read()
                 x = pd.read_csv("tmp.csv")
                 summary = list(x.iloc[len(x) - 1][3:-4])
                 tot_o2 += int(summary[0])
@@ -2090,7 +2092,7 @@ if __name__ == "__main__":
                         a = open("data.delhi.csv", "a")
                         a.write(info + "\n")
                         a.close()
-                    archive_raw_source(city,y)
+                    archive_raw_source(city,json.dumps(y))
                 else:
                     print(
                         "could not get data from https://coronabeds.jantasamvad.org/covid-info.js"
