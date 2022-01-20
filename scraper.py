@@ -40,7 +40,7 @@ def archive_raw_source(city,html_str):
         x.close()
         print('created archive for city: %s in %s' %(city,fname));
         os.system('git add --verbose '+base_path+' && git add --verbose '+fname)
-        os.system('git commit -a -m "test" --verbose '+base_path+' && git commit -a -m "adding '+fname+'" --verbose '+fname )
+        os.system('git commit -m "adding '+fname+'" --verbose' )
 def get_dataset_from_html_table(table):
     headings = [th.get_text() for th in table.find("tr").find_all("th")]
     datasets = []
