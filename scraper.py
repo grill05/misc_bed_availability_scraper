@@ -1405,6 +1405,7 @@ if __name__ == "__main__":
                 )
                 print(city + ":")
                 print(row)
+                archive_raw_source(city,archive_str)
 
             elif city == "tn":
                 tamil_nadu_auto_parse_latest_bulletin()
