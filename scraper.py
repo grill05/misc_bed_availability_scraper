@@ -2145,7 +2145,7 @@ if __name__ == "__main__":
                 print(row)
                 archive_raw_source(city,str(soup))
             elif city == "ap":
-                try:
+                # ~ try:
                     options = webdriver.ChromeOptions()
                     options.add_argument("--ignore-certificate-errors")
                     options.add_argument("--headless")
@@ -2185,10 +2185,10 @@ if __name__ == "__main__":
                     print(city + ":")
                     print(row)
                     archive_raw_source(city,str(soup))
-                except:
-                    print(
-                        "Failed to download/scrape AP data from http://dashboard.covid19.ap.gov.in/ims/hospbed_reports/ !!"
-                    )
+                # ~ except:
+                    # ~ print(
+                        # ~ "Failed to download/scrape AP data from http://dashboard.covid19.ap.gov.in/ims/hospbed_reports/ !!"
+                    # ~ )
             elif city == "telangana":
 
                 soup = get_url_failsafe(
