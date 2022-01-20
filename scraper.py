@@ -34,8 +34,8 @@ def archive_raw_source(city,html_str):
         print('archive for city: %s already existed at %s. returning' %(city,fname));
         return
     else:
-        import zipfile,zlib
-        x=zipfile.ZipFile(fname,'w')
+        import zipfile,zlib,bz2
+        x=zipfile.ZipFile(fname,'w',compression=zipfile.ZIP_BZIP2)
         x.writestr('source.htm',html_str)
         x.close()
         print('created archive for city: %s in %s' %(city,fname));
