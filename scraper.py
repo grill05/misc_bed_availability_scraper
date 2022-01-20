@@ -24,7 +24,20 @@ global_proxy = "socks4://111.90.175.13:5678"
 os.environ["TZ"] = "Asia/Kolkata"
 time.tzset()
 
-
+def archive_raw_source(city,html_str):
+    #test if archive already exists
+    date = datetime.datetime.now();date_str = date.strftime("%Y-%m-%d")
+    fname='raw_sources/'+city+'/'+date_str+'.zip'
+    if os.path.exists(fname):
+        print('archive for city: %s already existed at %s. returning' %(city,fname));
+        return
+    else:
+        import zipfile,zlib
+        x=zipfile.ZipFile(fname,'w')
+        x.writestr('source.htm',html_str)
+        x.close()
+        print('created archive for city: %s in %s' %(city,fname));
+        os.system('git add '+fname)
 def get_dataset_from_html_table(table):
     headings = [th.get_text() for th in table.find("tr").find_all("th")]
     datasets = []
@@ -2235,6 +2248,7 @@ if __name__ == "__main__":
                 )
                 print(city + ":")
                 print(row)
+                archive_raw_source(city,str(soup))
 
             elif city == "uttarakhand":
 
