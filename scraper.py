@@ -39,7 +39,8 @@ def archive_raw_source(city,html_str):
         x.writestr('source.htm',html_str)
         x.close()
         print('created archive for city: %s in %s' %(city,fname));
-        os.system('git config --global user.email "you@example.com" && git config --global user.name "Your Name" && git add --verbose '+base_path+' && git add --verbose '+fname+'&& git commit -m "adding '+fname+'" --verbose' )
+        os.system('git config --global user.email "you@example.com" && git config --global user.name "Your Name" && git add --verbose '+base_path+' && git add --verbose '+fname )
+        
 def get_dataset_from_html_table(table):
     headings = [th.get_text() for th in table.find("tr").find_all("th")]
     datasets = []
@@ -2597,3 +2598,5 @@ if __name__ == "__main__":
             % (detailed_date_str, ", ".join(failed_cities))
         )
         afailed.close()
+    #commit raw sources
+    os.system('git config --global user.email "you@example.com" && git config --global user.name "Your Name"&& git commit -a -m "adding raw sources" --verbose' )
