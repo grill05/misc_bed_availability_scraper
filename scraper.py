@@ -1106,6 +1106,9 @@ if __name__ == "__main__":
                 options = webdriver.ChromeOptions()
                 options.add_argument("--ignore-certificate-errors")
                 options.add_argument("--headless")
+                #page requires proxy
+                options.add_argument('--proxy-server='+global_proxy)
+
                 br = webdriver.Chrome(chrome_options=options)
                 br.get("https://govthealth.cg.gov.in/")
                 soup = BeautifulSoup(br.page_source, "html.parser")
