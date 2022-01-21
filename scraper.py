@@ -2155,13 +2155,20 @@ if __name__ == "__main__":
                     options.add_argument("--headless")
                     br = webdriver.Chrome(chrome_options=options)
                     br.get("http://dashboard.covid19.ap.gov.in/ims/hospbed_reports//")
-                    time.sleep(3)
-                    x = br.page_source
-                    soup = BeautifulSoup(x, "html.parser")
-                    
+                    time.sleep(9); #allow page to load fully
+                    soup = BeautifulSoup(br.page_source, "html.parser")
+                    for body in soup("tbody"): body.unwrap()
+                    x=pd.read_html(str(soup),flavor='bs4')
+                    if not x:
+                        print('Could not find "Table" element in Andhra Pradesh dashboard page, archiving and continuing')
+                        archive_raw_source(city,str(soup))
+                        continue
+                    else:
+                        x=x[0]
+
                     (
-                        xyz,
-                        number_of_hospitals,
+                        # ~ xyz,
+                        # ~ number_of_hospitals,
                         tot_icu,
                         occupied_icu,
                         vacant_icu,
@@ -2171,10 +2178,13 @@ if __name__ == "__main__":
                         tot_normal,
                         occupied_normal,
                         vacant_normal,
-                        tot_vent,
-                        occupied_vent,
-                        vacant_vent,
-                    ) = [i.text for i in soup("tr")[-1]("td")][:14]
+                        # ~ tot_vent,
+                        # ~ occupied_vent,
+                        # ~ vacant_vent,
+                    ) = list(x.iloc[len(x)-1])[3:12]
+                    
+                    tot_vent=occupied_vent=""
+                    
                     row = (
                         date_str,
                         tot_normal,
