@@ -2611,5 +2611,5 @@ if __name__ == "__main__":
             % (detailed_date_str, ", ".join(failed_cities))
         )
         afailed.close()
-    #commit raw sources
-    os.system('git config --global user.email "you@example.com" && git config --global user.name "Your Name"&& git commit -a -m "adding raw sources" --verbose' )
+    #at raw sources
+    # ~ os.system('git config --global user.email "you@example.com" && git config --global user.name "Your Name"&& git commit -a -m "adding raw sources" --verbose' )
