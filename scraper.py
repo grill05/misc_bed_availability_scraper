@@ -637,7 +637,7 @@ if __name__ == "__main__":
         "gurugram",
         "tn",
         "mumbai",
-        "chandigarh.citydashboard",
+        "chandigarh",
         "uttarakhand",
         "kerala",
         "ap",
@@ -675,7 +675,7 @@ if __name__ == "__main__":
         "mp",
         "hp",
         "pune",
-        "chandigarh.citydashboard",
+        "chandigarh",
         "uttarakhand",
         "kerala",
         "ap",
@@ -2324,7 +2324,7 @@ if __name__ == "__main__":
                 print(row)
                 archive_raw_source(city,str(soup))
 
-            elif city == "chandigarh.citydashboard":
+            elif city == "chandigarh":
 
                 soup = get_url_failsafe(
                     "http://chdcovid19.in/chdcovidbed19/index.php/home/stats"
