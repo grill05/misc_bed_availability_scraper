@@ -1599,6 +1599,14 @@ if __name__ == "__main__":
                     vacant_normal, vacant_icu, vacant_all = raw_line[-3:]
                     occupied_normal = int(tot_normal) - int(vacant_normal)
                     occupied_icu = int(tot_icu) - int(vacant_icu)
+                    
+                    cumulative_admissions_to_date = int(raw_line[11])
+                    
+                    new_male_admissions,new_female_admissions,new_all_admissions=raw_line[6:9]
+                    new_male_discharges,new_female_discharges,new_all_discharges=raw_line[15:18]
+                    new_male_deaths,new_female_deaths,new_all_deaths=raw_line[18:21]
+                    pedriatric_male_deaths,pedriatric_female_occupancy,pedriatric_all_occupancy=raw_line[25:28]
+                    
                     report_date = os.path.split(links[0])[1]
                     report_date = report_date.split("Report_")[1].split("_")[0]
                     report_date_str = datetime.datetime.strptime(
@@ -1610,6 +1618,11 @@ if __name__ == "__main__":
                         tot_icu,
                         occupied_normal,
                         occupied_icu,
+                        cumulative_admissions_to_date,
+                        new_male_admissions,new_female_admissions,new_all_admissions,
+                        new_male_discharges,new_female_discharges,new_all_discharges,
+                        new_male_deaths,new_female_deaths,new_all_deaths,
+                        pedriatric_male_deaths,pedriatric_female_occupancy,pedriatric_all_occupancy
                     )
                     print(city + ":")
                     print(row)
