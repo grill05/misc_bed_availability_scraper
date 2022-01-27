@@ -2166,12 +2166,13 @@ if __name__ == "__main__":
                 archive_raw_source(city,str(soup))
             elif city == "ap":
                 try:
-                    options = webdriver.ChromeOptions()
-                    options.add_argument("--ignore-certificate-errors")
-                    options.add_argument("--headless")
-                    br = webdriver.Chrome(chrome_options=options)
+                    # ~ options = webdriver.ChromeOptions()
+                    # ~ options.add_argument("--ignore-certificate-errors")
+                    # ~ options.add_argument("--headless")
+                    # ~ br = webdriver.Chrome(chrome_options=options)
+                    br = webdriver.PhantomJS()
                     br.get("http://dashboard.covid19.ap.gov.in/ims/hospbed_reports//")
-                    time.sleep(9); #allow page to load fully
+                    time.sleep(6); #allow page to load fully
                     soup = BeautifulSoup(br.page_source, "html.parser")
                     for body in soup("tbody"): body.unwrap()
                     x=pd.read_html(str(soup),flavor='bs4')
