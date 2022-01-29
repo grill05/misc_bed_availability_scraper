@@ -1117,16 +1117,13 @@ if __name__ == "__main__":
                 options.add_argument("--headless")
                 # page requires proxy
                 # ~ options.add_argument('--proxy-server='+global_proxy)
+                br = webdriver.Chrome(chrome_options=options)
                 webdriver.DesiredCapabilities.CHROME["proxy"] = {
-                    "httpProxy": global_proxy,
-                    "ftpProxy": global_proxy,
-                    "sslProxy": global_proxy,
                     "proxyType": "MANUAL",
                     "socksProxy": global_proxy,
                     "socksVersion": 4,
                 }
 
-                br = webdriver.Chrome(chrome_options=options)
                 br.get("https://govthealth.cg.gov.in/")
                 soup = BeautifulSoup(br.page_source, "html.parser")
 
@@ -1269,6 +1266,11 @@ if __name__ == "__main__":
                 options.add_argument("--ignore-certificate-errors")
                 options.add_argument("--headless")
                 br = webdriver.Chrome(chrome_options=options)
+                webdriver.DesiredCapabilities.CHROME["proxy"] = {
+                    "proxyType": "MANUAL",
+                    "socksProxy": global_proxy,
+                    "socksVersion": 4,
+                }
                 br.get("https://covid19.nagaland.gov.in/charts")
 
                 soup = BeautifulSoup(br.page_source, "lxml")
@@ -2208,6 +2210,11 @@ if __name__ == "__main__":
                     # ~ options.add_argument("--headless")
                     # ~ br = webdriver.Chrome(chrome_options=options)
                     br = webdriver.PhantomJS()
+                    webdriver.DesiredCapabilities.CHROME["proxy"] = {
+                        "proxyType": "MANUAL",
+                        "socksProxy": global_proxy,
+                        "socksVersion": 4,
+                    }
                     br.get("http://dashboard.covid19.ap.gov.in/ims/hospbed_reports//")
                     time.sleep(6)
                     # allow page to load fully
