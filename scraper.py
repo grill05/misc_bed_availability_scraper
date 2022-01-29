@@ -18,7 +18,7 @@ from bs4 import BeautifulSoup
 # ~ global_proxy='socks4://103.88.221.194:46450'
 # ~ global_proxy = "socks4://49.206.195.204:5678"
 global_proxy = "socks4://111.90.175.13:5678"
-# ~ if 'GLOBAL_PROXY' in os.environ: global_proxy=os.environ['GLOBAL_PROXY']
+# ~ if 'GLOBAL_PROXY' in os.environ: global_proxy=os.environ['GLOBAL_global_proxy']
 
 # Set timezone globally
 os.environ["TZ"] = "Asia/Kolkata"
@@ -1117,6 +1117,14 @@ if __name__ == "__main__":
                 options.add_argument("--headless")
                 # page requires proxy
                 # ~ options.add_argument('--proxy-server='+global_proxy)
+                webdriver.DesiredCapabilities.CHROME["proxy"] = {
+                    "httpProxy": global_proxy,
+                    "ftpProxy": global_proxy,
+                    "sslProxy": global_proxy,
+                    "proxyType": "MANUAL",
+                    "socksProxy": global_proxy,
+                    "socksVersion": 4,
+                }
 
                 br = webdriver.Chrome(chrome_options=options)
                 br.get("https://govthealth.cg.gov.in/")
