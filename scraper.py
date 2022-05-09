@@ -100,7 +100,7 @@ def get_data_df(br):
     return data_df
 
 
-def get_url_failsafe(u, timeout=25, out=""):
+def get_url_failsafe(u, timeout=105, out=""):
     if out:
         print(
             "downloading %s in get_url_failsafe to %s, timeout: %d sec"
@@ -468,7 +468,7 @@ def gurugram_auto_parse_latest_bulletin():
 def mumbai_bulletin_auto_parser(bulletin="", proxy=global_proxy):
     if not bulletin:  # download latest bulletin
         # ~ cmd='wget --no-check-certificate --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36" "https://stopcoronavirus.mcgm.gov.in/assets/docs/Dashboard.pdf"'
-        cmd = 'curl -# --max-time 15  -O -# -k -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36" "https://stopcoronavirus.mcgm.gov.in/assets/docs/Dashboard.pdf"'
+        cmd = 'curl -# --max-time 150  -O -# -k -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36" "https://stopcoronavirus.mcgm.gov.in/assets/docs/Dashboard.pdf"'
         print(cmd)
         os.system(cmd)
         if os.path.exists("Dashboard.pdf"):
@@ -481,7 +481,7 @@ def mumbai_bulletin_auto_parser(bulletin="", proxy=global_proxy):
     else:
         while (not os.path.exists(bulletin)) and (tries < max_tries):
             cmd = (
-                'curl -# --max-time 60 -O  -k -x "'
+                'curl -# --max-time 200 -O  -k -x "'
                 + proxy
                 + '" "https://stopcoronavirus.mcgm.gov.in/assets/docs/Dashboard.pdf"'
             )
