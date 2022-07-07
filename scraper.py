@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver import ActionChains
-from tabula import read_pdf
+#from tabula import read_pdf
 import pandas as pd
 from urllib.parse import unquote
 
@@ -638,6 +638,7 @@ if __name__ == "__main__":
     failed_cities = []
     all_cities = [
         "bengaluru",
+        "thane",
         "hp",
         "mp",
         "chennai",
@@ -684,6 +685,7 @@ if __name__ == "__main__":
     generic_writer_cities = [
         "mp",
         "hp",
+        "thane",
         "pune",
         "chandigarh",
         "uttarakhand",
@@ -834,6 +836,21 @@ if __name__ == "__main__":
                     a.write(info + "\n")
                     a.close()
                     print("Appended to data.bengaluru.csv: " + info)
+            elif city == "thane":
+                soup = get_url_failsafe('https://coviguard.in/Tmc_HM/HospitalInfo/showhospitalist')
+                for body in soup("tbody"): body.unwrap()
+                x = pd.read_html(str(soup), flavor="bs4")
+                
+                it,io,iv=list(x[0].loc[0][1:].astype(int))
+                ot,oo,ov=list(x[0].loc[1][1:].astype(int))
+                nt,no,nv=list(x[0].loc[2][1:].astype(int))
+                vt,vo,vv=list(x[0].loc[3][1:].astype(int))
+                
+                
+                row = (date_str, nt, ot, it, vt, no, oo, io, vo)
+                print(city + ":")
+                print(row)
+                archive_raw_source(city, str(soup))
 
             elif city == "pgimer":
                 soup = get_url_failsafe(
