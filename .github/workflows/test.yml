@@ -35,6 +35,9 @@ jobs:
     - name: Scrape BENGALURU beds data
       if: always()
       run: python scraper.py bengaluru
+    - name: Scrape THANE beds data
+      if: always()
+      run: python scraper.py thane
     - name: Scrape HP beds data
       if: always()
       run: python scraper.py hp
